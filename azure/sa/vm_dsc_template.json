@@ -40,7 +40,7 @@
         "autoUpgradeMinorVersion": "true",
         "settings": {
       	  "configuration": {
-		        "url": "[concat(parameters('_artifactsLocation'), '/', 'Install-PCoIPStdAgent.zip')]",
+		        "url": "[concat(parameters('_artifactsLocation'), '/sa/', 'Install-PCoIPStdAgent.zip')]",
 			      "script": "Install-PCoIPStdAgent.ps1",
 			      "function": "InstallPCoIPAgent"
 		      },                

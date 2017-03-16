@@ -30,7 +30,7 @@
     },
     "_agentUrl": {
       "type": "string",
-      "defaultValue": "https://teradeploy.blob.core.windows.net/binaries/PCoIP_agent_release_installer_2.8.0.5813_standard",
+      "defaultValue": "https://teradeploy.blob.core.windows.net/binaries/PCoIP_agent_release_installer_2.8.0.5813_standard.exe",
       "metadata": {
         "description": "The location of PCoIP Agent Installer file"
       }
