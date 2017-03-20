@@ -80,7 +80,7 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('vmSettings').vmNamePrefix]",
       "apiVersion": "2017-03-30",
-            "location": "[resourceGroup().location]",
+      "location": "[resourceGroup().location]",
       "properties": {
         "hardwareProfile": {
           "vmSize": "[variables('vmSettings').vmSize]"
@@ -106,7 +106,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))).PrimaryEndpoints.Blob]"
+            "storageUri": "[reference(resourceGroup().name, resourceId('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))).PrimaryEndpoints.Blob]"
           }
         },
         "networkProfile": {
