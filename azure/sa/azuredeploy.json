@@ -158,10 +158,6 @@
   ],
 
   "outputs": {
-    "vm_IP": {
-      "type": "string",
-      "value": "[reference('depolyNIC').outputs.vm_IP.value]"
-    },
     "vm_fqdn": {
       "type": "string",
       "value": "[reference('depolyNIC').outputs.vm_fqdn.value]"
