@@ -77,10 +77,6 @@
   ],
 
   "outputs": {
-    "vm_IP": {
-      "type": "string",
-      "value": "[reference(resourceId ('Microsoft.Network/publicIPAddresses', variables('pipName')), variables('apiVersion')).ipAddress]"
-    },
     "vm_fqdn": {
       "type": "string",
       "value": "[reference(resourceId ('Microsoft.Network/publicIPAddresses', variables('pipName')), variables('apiVersion')).dnsSettings.fqdn]"
