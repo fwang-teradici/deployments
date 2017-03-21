@@ -83,7 +83,7 @@
         },
         "parameters": {
           "domainNameLabel": {
-            "value": "[concat(resourceGroup().name, '.', variables('vmNamePrefix'))]"
+            "value": "[replace(replace(concat(variables('vmNamePrefix'), uniqueString(resourceGroup().name)), '-',''),'.','')]"
           },
           "subnetId": {
             "value": "[reference('depolyVNet').outputs.subnetRef.value]"
