@@ -82,6 +82,9 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "domainNameLabel": {
+            "value": "[concat(resourceGroup().name, '.', variables('vmNamePrefix'))]"
+          },
           "subnetId": {
             "value": "[reference('depolyVNet').outputs.subnetRef.value]"
           },
