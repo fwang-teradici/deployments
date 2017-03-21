@@ -102,14 +102,11 @@
           },
           "osDisk": {
             "name": "osdisk",
+            "vhd": {
+              "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))).primaryEndpoints.blob, 'vhds/', variables('vmSettings').vmNamePrefix, '-os-disk.vhd')]"
+            },
             "caching": "ReadWrite",
             "createOption": "FromImage"
-          }
-        },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": true,
-            "storageUri": "[variables('storageUrl')]"
           }
         },
         "networkProfile": {
