@@ -33,36 +33,55 @@ Configuration InstallPCoIPAgent
                             {return $true}
                             else {return $false} }
             SetScript  = {
-                Write-Output "Starting to Install PCoIPAgent"
+                Write-Verbose "Starting to Install PCoIPAgent"
 
                 $sourceUrl = $using:sourceUrl
                 $installerFileName = [System.IO.Path]::GetFileName($sourceUrl)
                 $destFile = "C:\WindowsAzure\PCoIPAgentInstaller\" + $installerFileName
                 
-				Write-Output "Downloading PCoIP Agent"
+				Write-Verbose "Downloading PCoIP Agent"
                 Invoke-WebRequest $sourceUrl -OutFile $destFile
+				#verify md5
 
                 #install the agent
-				Write-Output "Installing PCoIP Agent"
-                Start-Process -FilePath "$destFile" -ArgumentList "/S" -Wait
+				Write-Verbose "Installing PCoIP Agent"
+                $ret = Start-Process -FilePath "$destFile" -ArgumentList "/S" -PassThru -Wait
+				if ($ret.ExitCode -ne 0) {
+					$errMsg = "Failed to install PCoIP Agent. Exit Code: " + $ret.ExitCode
+					Write-Verbose $errMsg
+					throw $errMsg
+				}
                 
                 #register
                 $registrationCode = $using:registrationCode
                 if ($registrationCode) {
-					Write-Output "Activating License Code"               
 	                cd "C:\Program Files (x86)\Teradici\PCoIP Agent"
+
+					Write-Verbose "Activating License Code"               
  	                & .\pcoip-register-host.ps1 -RegistrationCode $registrationCode
+					if (-not $?) {
+						$errMsg = "Failed to activate License Code."
+						Write-Verbose  $errMsg              
+						throw $errMsg
+					}
+
+					Write-Verbose "Validating License"               
  	                & .\pcoip-validate-license.ps1
+					if (-not $?) {
+						$errMsg = "Failed to validate license."
+						Write-Verbose  $errMsg              
+						throw $errMsg
+					}
                 }
                 
 				$serviceName = "PCoIPAgent"
 				if ( (Get-Service  $serviceName).status -eq "Stopped" ) 
 				{
-					Write-Output "Starting PCoIP Agent Service because it is stopped."
-					Start-Service $serviceName | Out-Null
+					Write-Verbose "Starting PCoIP Agent Service because it is stopped."
+					Start-Service $serviceName
 				}                
 				
-                Write-Output "Finish PCoIP Agent Installation"
+                Write-Verbose "Finish PCoIP Agent Installation"
             }
         }
     }
