@@ -29,9 +29,14 @@ Configuration InstallPCoIPAgent
             GetScript  = { @{ Result = "Install_PCoIPAgent" } }
 
             #TODO: Check for other agent types as well?
-            TestScript = { if ( Get-Item -path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\PCoIP Standard Agent" -ErrorAction SilentlyContinue )
-                            {return $true}
-                            else {return $false} }
+            TestScript = {
+				if ( Get-Item -path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\PCoIP Standard Agent" -ErrorAction SilentlyContinue )  {
+					return $true
+				}else {
+					return $false
+				} 
+			}
+
             SetScript  = {
                 Write-Verbose "Starting to Install PCoIPAgent"
 
@@ -45,16 +50,27 @@ Configuration InstallPCoIPAgent
 
                 #install the agent
 				Write-Verbose "Installing PCoIP Agent"
-                $ret = Start-Process -FilePath "$destFile" -ArgumentList "/S" -PassThru -Wait
+                $ret = Start-Process -FilePath $destFile -ArgumentList "/S /nopostreboot" -PassThru -Wait
+
+				# Check installer return code
+				$rebootRequired = $False
 				if ($ret.ExitCode -ne 0) {
-					$errMsg = "Failed to install PCoIP Agent. Exit Code: " + $ret.ExitCode
-					Write-Verbose $errMsg
-					throw $errMsg
+					if ($ret.ExitCode -eq 1641) {
+						# Reboot is required.
+						$rebootRequired = $True
+					} else {
+						$errMsg = "Failed to install PCoIP Agent. Exit Code: " + $ret.ExitCode
+						Write-Verbose $errMsg
+						throw $errMsg
+					}
 				}
-                
+
+				Start-Sleep -Seconds (30)
+
                 #register
                 $registrationCode = $using:registrationCode
                 if ($registrationCode) {
+
 	                cd "C:\Program Files (x86)\Teradici\PCoIP Agent"
 
 					Write-Verbose "Activating License Code"               
@@ -73,15 +89,21 @@ Configuration InstallPCoIPAgent
 						throw $errMsg
 					}
                 }
-                
-				$serviceName = "PCoIPAgent"
-				if ( (Get-Service  $serviceName).status -eq "Stopped" ) 
-				{
-					Write-Verbose "Starting PCoIP Agent Service because it is stopped."
-					Start-Service $serviceName
-				}                
-				
-                Write-Verbose "Finish PCoIP Agent Installation"
+               
+				if ($rebootRequired) {
+	                Write-Verbose "Finished PCoIP Agent Installation, reboot Machine."
+					# Insert a delay before the reboot, otherwise the machine might be stuck in a reboot 				
+					Start-Sleep -Seconds (90)
+			        # Setting the global:DSCMachineStatus = 1 tells DSC that a reboot is required
+				    $global:DSCMachineStatus = 1
+				} else {
+					$serviceName = "PCoIPAgent"
+					if ( (Get-Service  $serviceName).status -eq "Stopped" )	{
+						Write-Verbose "Starting PCoIP Agent Service because it is at stopped status."
+						Start-Service $serviceName
+					}                
+	                Write-Verbose "Finished PCoIP Agent Installation"
+				}			
             }
         }
     }
