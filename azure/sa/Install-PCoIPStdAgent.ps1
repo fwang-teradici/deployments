@@ -1,7 +1,7 @@
 # Install-PCoIPStdAgent.ps1
 Configuration InstallPCoIPAgent
 {
-    param(
+	param(
      	[Parameter(Mandatory=$true)]
      	[String] $sourceUrl,
     
@@ -9,6 +9,9 @@ Configuration InstallPCoIPAgent
      	[String] $registrationCode     	
 	)
 	
+	# Get this from TechNet Gallery
+    Import-DscResource -Module xPendingReboot
+
     Node "localhost"
     {
         LocalConfigurationManager
@@ -91,20 +94,28 @@ Configuration InstallPCoIPAgent
                 }
                
 				if ($rebootRequired) {
-	                Write-Verbose "Finished PCoIP Agent Installation, reboot Machine."
+	                Write-Verbose "Reboot Machine."
 					# Insert a delay before the reboot, otherwise the machine might be stuck in a reboot 				
 					Start-Sleep -Seconds (90)
 			        # Setting the global:DSCMachineStatus = 1 tells DSC that a reboot is required
 				    $global:DSCMachineStatus = 1
-				} else {
-					$serviceName = "PCoIPAgent"
-					if ( (Get-Service  $serviceName).status -eq "Stopped" )	{
-						Write-Verbose "Starting PCoIP Agent Service because it is at stopped status."
-						Start-Service $serviceName
-					}                
-	                Write-Verbose "Finished PCoIP Agent Installation"
-				}			
+				} 
+				
+				#start service if it is not started
+				$serviceName = "PCoIPAgent"
+				if ( (Get-Service  $serviceName).status -eq "Stopped" )	{
+					Write-Verbose "Starting PCoIP Agent Service because it is at stopped status."
+					Start-Service $serviceName
+				}
+				
+	            Write-Verbose "Finished PCoIP Agent Installation"
             }
+        }
+
+		# Reboot if pending
+        xPendingReboot RebootCheck
+        {
+            Name = "RebootCheck"
         }
     }
 }
