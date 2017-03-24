@@ -65,7 +65,8 @@ Configuration InstallPCoIPAgent
 					}
 				}
 
-				Start-Sleep -Seconds (30)
+				# Insert a delay before activating license
+				Start-Sleep -Seconds (10)
 
                 #register
                 $registrationCode = $using:registrationCode
@@ -90,10 +91,11 @@ Configuration InstallPCoIPAgent
 					}
                 }
                
+				# Insert a delay before the reboot machine / start service
+				Start-Sleep -Seconds (20)
+
 				if ($rebootRequired) {
-	                Write-Verbose "Reboot Machine."
-					# Insert a delay before the reboot 				
-					Start-Sleep -Seconds (90)
+	                Write-Verbose "Request reboot machine."
 			        # Setting the global:DSCMachineStatus = 1 tells DSC that a reboot is required
 				    $global:DSCMachineStatus = 1
 				} else {				
