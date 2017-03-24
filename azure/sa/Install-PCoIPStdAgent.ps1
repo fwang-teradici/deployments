@@ -9,9 +9,6 @@ Configuration InstallPCoIPAgent
      	[String] $registrationCode     	
 	)
 	
-	# Get this from TechNet Gallery
-    Import-DscResource -Module xPendingReboot
-
     Node "localhost"
     {
         LocalConfigurationManager
@@ -110,12 +107,6 @@ Configuration InstallPCoIPAgent
 				
 	            Write-Verbose "Finished PCoIP Agent Installation"
             }
-        }
-
-		# Reboot if pending
-        xPendingReboot RebootCheck
-        {
-            Name = "RebootCheck"
         }
     }
 }
