@@ -92,17 +92,17 @@ Configuration InstallPCoIPAgent
                
 				if ($rebootRequired) {
 	                Write-Verbose "Reboot Machine."
-					# Insert a delay before the reboot, otherwise the machine might be stuck in a reboot 				
+					# Insert a delay before the reboot 				
 					Start-Sleep -Seconds (90)
 			        # Setting the global:DSCMachineStatus = 1 tells DSC that a reboot is required
 				    $global:DSCMachineStatus = 1
-				} 
-				
-				#start service if it is not started
-				$serviceName = "PCoIPAgent"
-				if ( (Get-Service  $serviceName).status -eq "Stopped" )	{
-					Write-Verbose "Starting PCoIP Agent Service because it is at stopped status."
-					Start-Service $serviceName
+				} else {				
+					#start service if it is not started
+					$serviceName = "PCoIPAgent"
+					if ( (Get-Service  $serviceName).status -eq "Stopped" )	{
+						Write-Verbose "Starting PCoIP Agent Service because it is at stopped status."
+						Start-Service $serviceName
+					}
 				}
 				
 	            Write-Verbose "Finished PCoIP Agent Installation"
