@@ -65,12 +65,11 @@ Configuration InstallPCoIPAgent
 					}
 				}
 
-				# Insert a delay before activating license
-				Start-Sleep -Seconds (10)
-
                 #register
                 $registrationCode = $using:registrationCode
                 if ($registrationCode) {
+					# Insert a delay before activating license
+					Start-Sleep -Seconds (5)
 
 	                cd "C:\Program Files (x86)\Teradici\PCoIP Agent"
 
@@ -92,7 +91,7 @@ Configuration InstallPCoIPAgent
                 }
                
 				# Insert a delay before the reboot machine / start service
-				Start-Sleep -Seconds (20)
+				Start-Sleep -Seconds (10)
 
 				if ($rebootRequired) {
 	                Write-Verbose "Request reboot machine."
