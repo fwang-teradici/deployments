@@ -44,9 +44,6 @@
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('vnetName')]",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[variables('nsgId')]"
-      ],        
       "tags": {
         "displayName": "VNet - PCoIP Agent"
       },
