@@ -34,7 +34,8 @@
 
   "variables": {
     "apiVersion": "2016-12-01",
-    "nsgName": "pcoipAgentNsg"
+    "nsgName": "pcoipAgentNsg",
+    "nsgId": "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
   },
 
   "resources": [
@@ -43,9 +44,6 @@
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('vnetName')]",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
-      ],
       "tags": {
         "displayName": "VNet - PCoIP Agent"
       },
@@ -61,7 +59,7 @@
             "properties": {
               "addressPrefix": "[parameters('subnetPrefix')]",
               "networkSecurityGroup": {
-                "id": "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
+                "id": "[variables('nsgId')]"
               }
             }
           }
