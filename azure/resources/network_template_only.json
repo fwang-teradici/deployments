@@ -44,7 +44,7 @@
       "name": "[parameters('vnetName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        [ "resourceId(subscription().subscriptionId", "resourceGroup().name", "Microsoft.Network/networkSecurityGroups", "variables('nsgName'))" ]
+        "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
       ],
       "tags": {
         "displayName": "VNet - PCoIP Agent"
