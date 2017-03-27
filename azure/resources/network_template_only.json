@@ -34,8 +34,7 @@
 
   "variables": {
     "apiVersion": "2016-12-01",
-    "nsgName": "pcoipAgentNsg",
-    "nsgId": "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
+    "nsgName": "pcoipAgentNsg"
   },
 
   "resources": [
@@ -59,7 +58,7 @@
             "properties": {
               "addressPrefix": "[parameters('subnetPrefix')]",
               "networkSecurityGroup": {
-                "id": "[variables('nsgId')]"
+                "id": "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
               }
             }
           }
