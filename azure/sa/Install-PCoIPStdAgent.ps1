@@ -41,7 +41,7 @@ Configuration InstallPCoIPAgent
                 Write-Verbose "Starting to Install PCoIPAgent"
 
 				#agent installer exit code 1641 require reboot machine
-				Set-Variable AGENT_REBOOT_EXIT_CODE 1641 -Option Constant
+				Set-Variable EXIT_CODE_REBOOT 1641 -Option Constant
 
                 $sourceUrl = $using:sourceUrl
                 $installerFileName = [System.IO.Path]::GetFileName($sourceUrl)
@@ -58,7 +58,8 @@ Configuration InstallPCoIPAgent
 				# Check installer return code
 				$rebootRequired = $False
 				if ($ret.ExitCode -ne 0) {
-					if ($ret.ExitCode -eq $AGENT_REBOOT_EXIT_CODE) {
+					#exit code 1641 means requiring reboot machine after intallation is done, other non zere exit code means installation has some error
+					if ($ret.ExitCode -eq $EXIT_CODE_REBOOT) {
 						$rebootRequired = $True
 					} else {
 						$errMsg = "Failed to install PCoIP Agent. Exit Code: " + $ret.ExitCode
