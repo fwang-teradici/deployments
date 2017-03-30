@@ -2,6 +2,34 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters" : {
+    "vnetName": {
+      "type": "string",
+      "defaultValue": "PCoIP_VNET",
+      "metadata": {
+        "description": "Name for the Virtual Network."
+      }
+    },
+    "vnetPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.0.0/16",
+      "metadata": {
+        "description": "CIDR prefix for the VNet address space."
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "defaultValue": "StdAgent",
+      "metadata": {
+        "description": "Name for the subnet."
+      }
+    },
+    "subnetPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.1.0/24",
+      "metadata": {
+        "description": "CIDR address prefix for the subnet."
+      }
+    }
   },  
 
   "variables": {
@@ -18,9 +46,9 @@
       "tags": {
         "displayName": "NSG - PCoIP Agent"
       },
-
+      
       "properties": {
-        "securityRules": [
+	      "securityRules": [
           {
             "name": "rdp-rule",
             "properties": {
@@ -76,9 +104,47 @@
               "priority": 202,
               "direction": "Inbound"
             }
+          }                    
+        ]
+      }
+    },      
+      
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('vnetName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+   	    "[concat('Microsoft.Network/networkSecurityGroups', '/', variables('nsgName'))]"
+      ],        
+      "tags": {
+        "displayName": "VNet - PCoIP Agent"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('vnetPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('subnetName')]",
+            "properties": {
+                "addressPrefix": "[parameters('subnetPrefix')]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
+                }                
+            }
           }
         ]
       }
+    }  
+  ],
+
+  "outputs": {
+    "subnetRef": {
+      "type": "string",
+      "value": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')),'/subnets/',parameters('subnetName'))]"
     }
-  ]
+  }
 }
