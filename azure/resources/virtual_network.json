@@ -35,8 +35,7 @@
   },  
 
   "variables": {
-    "apiVersion": "2016-12-01",
-    "nsgName": "pcoipAgentNsg"
+    "apiVersion": "2016-12-01"
   },
 
   "resources": [
@@ -45,9 +44,6 @@
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('vnetName')]",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-   	    "[concat('Microsoft.Network/networkSecurityGroups', '/', variables('nsgName'))]"
-      ],        
       "tags": {
         "displayName": "VNet - PCoIP Agent"
       },
