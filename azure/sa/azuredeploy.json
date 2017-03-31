@@ -115,11 +115,11 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "vmNamePrefix": {
+          "vmName": {
             "value": "[variables('vmNamePrefix')]"
           },
           "nsgName": {
-            "value": "[variables('vmNamePrefix')]"
+            "value": "[variables('nsgName')]"
           },
           "vnetName": {
             "value": "[variables('vnetName')]"

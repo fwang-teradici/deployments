@@ -20,7 +20,7 @@
     },
     "subnetName": {
       "type": "string",
-      "defaultValue": "stdAgent-subnet",
+      "defaultValue": "stdAgentVM-subnet",
       "metadata": {
         "description": "Name of the agent subnet."
       }
