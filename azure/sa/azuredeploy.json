@@ -21,6 +21,7 @@
     },
     "registrationCode": {
       "type": "securestring",
+      "minLength": 1,
       "metadata": {
         "description": "PCoIP Standard Agent License Registration Code."
       }
