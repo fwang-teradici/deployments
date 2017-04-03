@@ -9,7 +9,7 @@ Configuration InstallPCoIPAgent
      	[PSCredential] $dummyCredential
 	)
 	
-	$downloadPath = $HOME + "\Downloads"
+	$downloadPath = "C:\WindowsAzure\Downloads"
 
     Node "localhost"
     {
