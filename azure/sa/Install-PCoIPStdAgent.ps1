@@ -9,7 +9,7 @@ Configuration InstallPCoIPAgent
      	[PSCredential] $dummyCredential
 	)
 	
-	$downloadPath = "D:\download"
+	$downloadPath = $HOME + "\Downloads"
 
     Node "localhost"
     {
@@ -69,7 +69,7 @@ Configuration InstallPCoIPAgent
 				}
 
                 #register
-                $registrationCode = $using:dummyCredential.password
+                $registrationCode = ($using:dummyCredential).GetNetworkCredential().password
                 if ($registrationCode) {
 					# Insert a delay before activating license
 	                cd "C:\Program Files (x86)\Teradici\PCoIP Agent"
