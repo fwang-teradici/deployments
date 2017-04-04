@@ -53,7 +53,7 @@
         },
         "protectedSettings": {
           "configurationArguments": {
-            "dummyCredential": {
+            "registrationCodeCredential": {
               "userName": "dummyUser",
               "password": "[parameters('registrationCode')]"
             }

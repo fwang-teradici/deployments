@@ -6,7 +6,7 @@ Configuration InstallPCoIPAgent
      	[String] $sourceUrl,
     
      	[Parameter(Mandatory=$true)]
-     	[PSCredential] $dummyCredential
+     	[PSCredential] $registrationCodeCredential
 	)
 	
 	$downloadPath = "C:\WindowsAzure\Downloads"
@@ -68,8 +68,8 @@ Configuration InstallPCoIPAgent
 					}
 				}
 
-                #register
-                $registrationCode = ($using:dummyCredential).GetNetworkCredential().password
+                #register code is stored at the password property of PSCredential object
+                $registrationCode = ($using:registrationCodeCredential).GetNetworkCredential().password
                 if ($registrationCode) {
 					# Insert a delay before activating license
 	                cd "C:\Program Files (x86)\Teradici\PCoIP Agent"
