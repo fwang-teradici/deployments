@@ -120,7 +120,6 @@
       "name": "deployVM",
       "apiVersion": "[variables('deploymentApiVersion')]",
       "dependsOn": [
-        "deploySA",
         "depolyNIC"
       ],
       "properties": {
