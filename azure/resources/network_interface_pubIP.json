@@ -35,7 +35,8 @@
     "apiVersion": "2016-12-01",
     "nicName": "[concat(parameters('namePrefix'), '-nic')]",
     "pipName": "[concat(parameters('namePrefix'), '-pip')]",
-    "domainNameLabel": "[tolower(replace(concat(parameters('namePrefix'), '-', uniqueString(resourceGroup().name)), '.',''))]",
+    "vmNamePrefix": "[concat(parameters('namePrefix'), '-vm')]",
+    "domainNameLabel": "[tolower(replace(concat(variables('vmNamePrefix'), '-', uniqueString(resourceGroup().name)), '.',''))]",
     "subnetId": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')),'/subnets/',parameters('subnetName'))]",
     "nsgId": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
   },
