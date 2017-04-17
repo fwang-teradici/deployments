@@ -35,9 +35,8 @@
     },
     "vmSize": {
       "type": "string",
-      "defaultValue": "Standard_D2_v2",
       "metadata": {
-        "description": "Virtual Machine Size"
+        "description": "Virtual Machine Size."
       }
     },
     "nicName": {

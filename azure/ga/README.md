@@ -10,7 +10,7 @@
 	  * 60443 TCP (for PCoIP diagnostics)
 	  * 4172 TCP and UDP (for PCoIP sessions)
 	* A Windows Server 2016 VM
-	* Teradici PCoIP Standard Agent 2.8
+	* Teradici PCoIP Graphics Agent 2.8 for Windows
 	* NVIDIA GRID 4.2 (369.95) Video Driver
 
 ### Structure of the templates
@@ -39,7 +39,7 @@
     ```
 	Add-AzureRmAccount
 	$azureRGName = "graphicsAgent-rg" #keep it short and with no special characters and no capitals
-	New-AzureRmResourceGroup -Name $azureRGName -Location "SOUTH CENTRAL US" # location must be one of **"EAST US", "NORTH CENTRAL US", "SOUTH CENTRAL US"**
+	New-AzureRmResourceGroup -Name $azureRGName -Location "SOUTH CENTRAL US" # location must be one of "EAST US", "NORTH CENTRAL US", "SOUTH CENTRAL US", "SOUTHEAST ASIA", "WEST EUROPE"
 	New-AzureRmResourceGroupDeployment -DeploymentName "gadeploy" -ResourceGroupName $azureRGName -TemplateFile "azuredeploy.json"
     ```
 
