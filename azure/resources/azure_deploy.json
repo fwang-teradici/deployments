@@ -169,7 +169,7 @@
 
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "deployNvidiaAndAgentDsc",
+      "name": "deployVmDsc",
       "apiVersion": "[variables('deploymentApiVersion')]",
       "dependsOn": [
         "deployVM"
