@@ -36,7 +36,7 @@
   "resources": [
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('vmName'), '/NvidiaPCoIPAgentDscExtension')]",
+      "name": "[concat(parameters('vmName'), '/PCoIPAgentDscExtension')]",
       "apiVersion": "2017-03-30",
       "location": "[resourceGroup().location]",
       "properties": {
@@ -46,7 +46,7 @@
         "autoUpgradeMinorVersion": "true",
         "settings": {
           "configuration": {
-            "url": "[concat(parameters('_artifactsLocation'), '/resources/', 'Install-NvidiaAndPCoIPAgent.zip')]",
+            "url": "[concat(parameters('_artifactsLocation'), '/resources/', 'Install-PCoIPAgent.zip')]",
             "script": "Install-NvidiaAndPCoIPAgent.ps1",
             "function": "InstallPCoIPAgent"
           },
