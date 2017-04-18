@@ -56,7 +56,7 @@
             "value": "[parameters('adminPassword')]"
           },
           "vmSize": {
-            "value": "Standard_NV6"
+            "value": "Standard_D2_v2"
           },
           "pcoipAgentInstallerUrl": {
             "value": "https://binarystore.blob.core.windows.net/agents/2.8/PCoIP_agent_release_installer_2.8.0.5813_standard.exe"

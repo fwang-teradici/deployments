@@ -34,6 +34,7 @@
     },
     "videoDriverUrl": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "The URL from which video driver for virtual machine will be downloaded. Only Graphic Workstation is required."
       }
