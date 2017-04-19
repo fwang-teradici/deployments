@@ -67,7 +67,7 @@ Configuration InstallPCoIPAgent
 
                 Write-Verbose "Installing Nvidia driver"
                 $ret = Start-Process -FilePath $destFile -ArgumentList "/s /noeula /noreboot" -PassThru -Wait
-                Write-Verbose "Nvidia driver exit code: "  + $ret.ExitCode
+                Write-Verbose ("Nvidia driver exit code: "  + $ret.ExitCode)
 
                 # treat returned code 0 and 1 as success
 				if (($ret.ExitCode -ne 0) -and ($ret.ExitCode -ne 1)) {
