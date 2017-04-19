@@ -66,7 +66,7 @@ Configuration InstallPCoIPAgent
                 Invoke-WebRequest $videoDriverUrl -OutFile $destFile
 
                 Write-Verbose "Installing Nvidia driver"
-                $ret = Start-Process -FilePath $destFile -ArgumentList "/S /noeula /noreboot" -PassThru -Wait
+                $ret = Start-Process -FilePath $destFile -ArgumentList "/s /noeula /noreboot" -PassThru -Wait
                 Write-Verbose "Nvidia driver exit code: "  + $ret.ExitCode
 
                 # treat returned code 0 and 1 as success
