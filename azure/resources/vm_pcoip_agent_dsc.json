@@ -46,7 +46,7 @@
         "autoUpgradeMinorVersion": "true",
         "settings": {
           "configuration": {
-            "url": "[concat(parameters('_artifactsLocation'), '/resources/', 'Install-PCoIPAgent.zip')]",
+            "url": "[concat(parameters('_artifactsLocation'), '/dsc/', 'Install-PCoIPAgent.zip')]",
             "script": "Install-PCoIPAgent.ps1",
             "function": "InstallPCoIPAgent"
           },
