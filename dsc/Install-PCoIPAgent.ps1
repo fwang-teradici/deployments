@@ -132,6 +132,13 @@ Configuration InstallPCoIPAgent
 					}
 				}
 				
+				if (!$using:isSA) {
+					Write-Verbose "reset grid for graphices agent."
+					Set-Location "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID"				
+					# using pipeline to enter input value to batch file, 'Y' means to confirm to run the command
+					'Y' | .\reset_grid.bat
+				}
+
 	            Write-Verbose "Finished PCoIP Agent Installation"
             }
         }
