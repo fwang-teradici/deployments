@@ -132,11 +132,53 @@ Configuration InstallPCoIPAgent
 					}
 				}
 				
-				if (!$using:isSA) {
+                $registrationCode = ($using:registrationCodeCredential).GetNetworkCredential().password
+                if ($registrationCode) {
+					# Insert a delay before activating license
+	                cd "C:\Program Files (x86)\Teradici\PCoIP Agent"
+
+					Write-Verbose "Activating License Code"               
+ 	                $ret = & .\pcoip-register-host.ps1 -RegistrationCode $registrationCode
+					$isExeSucc = $?
+
+					if ($isExeSucc) {
+						Write-Verbose "succeeded to activate License Code." 
+					} else {
+						$retMsg = $ret | Out-String
+						$errMsg = "Failed to activate License Code because " + $retMsg
+						Write-Verbose  $errMsg              
+						throw $errMsg
+					}
+
+					Write-Verbose "Validating License"               
+ 	                $ret = & .\pcoip-validate-license.ps1
+					$isExeSucc = $?
+
+					if ($isExeSucc) {
+						Write-Verbose "succeeded to validate License."
+					} else {
+						$retMsg = $ret | Out-String
+						$errMsg = "Failed to validate license because " + $retMsg
+						Write-Verbose  $errMsg              
+						throw $errMsg
+					}
+                }
+
+				if (!$using:isSA -and (Test-Path -path "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID\NvFBCEnable.exe")) {
 					Write-Verbose "reset grid for graphices agent."
-					Set-Location "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID"				
-					# using pipeline to enter input value to batch file, 'Y' means to confirm to run the command
-					'Y' | .\reset_grid.bat
+					Set-Location "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID"		
+					
+					Write-Verbose "Stoping NVIDIA licensing service"
+					net stop nvsvc | Out-Null
+
+					Write-Verbose "Disabling GRID frame buffer capture support"
+					NvFBCEnable -disable | Out-Null
+
+					Write-Verbose "Enabling GRID frame buffer capture support"
+					NvFBCEnable -enable | Out-Null
+
+					Write-Verbose "Enabling NVIDIA licensing service"
+					net start nvsvc	| Out-Null			
 				}
 
 	            Write-Verbose "Finished PCoIP Agent Installation"
@@ -208,6 +250,9 @@ Configuration InstallPCoIPAgent
 					$svc.Start()
 					$svc.WaitForStatus("Running", 120)
 				}
+
+
+
             }
         }
     }
