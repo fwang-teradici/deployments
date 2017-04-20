@@ -175,16 +175,15 @@ Configuration InstallPCoIPAgent
 
 				if (!$using:isSA -and (Test-Path -path "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID\NvFBCEnable.exe")) {
 					Write-Verbose "reset grid for graphices agent."
-					Set-Location "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID"		
 					
 					Write-Verbose "Stoping NVIDIA licensing service"
 					net stop nvsvc | Out-Null
 
 					Write-Verbose "Disabling GRID frame buffer capture support"
-					NvFBCEnable -disable | Out-Null
+					Start-Process -FilePath "NvFBCEnable.exe" -ArgumentList "-disable" -WorkingDirectory "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID" -Wait
 
 					Write-Verbose "Enabling GRID frame buffer capture support"
-					NvFBCEnable -enable | Out-Null
+					Start-Process -FilePath "NvFBCEnable.exe" -ArgumentList "-enable" -WorkingDirectory "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID" -Wait
 
 					Write-Verbose "Enabling NVIDIA licensing service"
 					net start nvsvc	| Out-Null			
