@@ -71,9 +71,18 @@ Configuration InstallPCoIPAgent
 
                 # treat returned code 0 and 1 as success
 				if (($ret.ExitCode -ne 0) -and ($ret.ExitCode -ne 1)) {
-                    $stdout = $ret.StandardOutput.ReadToEnd();
-                    $stderr = $ret.StandardError.ReadToEnd();
-					$errMsg = "Failed to install nvidia driver. standard output: " + $stdout + "; standard error: " + $stderr
+					$errMsg = "Failed to install nvidia driver, exit code: " + $ret.ExitCode
+
+					if ($ret.StandardOutput -ne $null) {
+	                    $stdout = $ret.StandardOutput.ReadToEnd()
+						$errMsg = $errMsg + "; standard output: " + $stdout
+					}
+					if ($ret.StandardError -ne $null) {
+	                    $stderr = $ret.StandardError.ReadToEnd()
+						$errMsg = $errMsg + "; standard error: " + $stderr
+					}
+
+					$errMsg = $errMsg + "."
 					Write-Verbose $errMsg
 					throw $errMsg
 				} else {
