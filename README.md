@@ -1,4 +1,4 @@
-# Deploying Teradici Cloud Access Software on Microsoft Azure
+# Deploy Teradici Cloud Access Software on Azure
 
 Use these steps to deploy a Virtual Machine on Azure, running Windows Server 2016, and the latest (v2.8) [Teradici Cloud Access Software](http://www.teradici.com/products-and-solutions/pcoip-products/cloud-access-software) - Standard Edition or Graphics Edition. 
 
@@ -22,13 +22,13 @@ By clicking one of the *Deploy to Azure* buttons below you accept the terms of t
 
 To deploy a Teradici PCoIP **Standard** agent, on a [Standard_D2_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes-general)\* type virtual machine, click
     
-<a target="_blank" href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffwang-teradici%2Fdeployments%2Fmaster%2Fazure-deploy-sa-windows2016.json"><img src="http://azuredeploy.net/deploybutton.png"/></a>
+<a target="_blank" href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fteradici%2Fpcoip-agent-azure-templates%2Fmaster%2Fazure-deploy-sa-windows2016.json"><img src="http://azuredeploy.net/deploybutton.png"/></a>
 
 #### Teradici PCoIP Graphics agent
 
 To deploy a Teradici PCoIP **Graphics** agent, on a [NV6](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes-gpu)\* type virtual machine, click
 
-<a target="_blank" href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffwang-teradici%2Fdeployments%2Fmaster%2Fazure-deploy-ga-windows2016.json"><img src="http://azuredeploy.net/deploybutton.png"/></a>
+<a target="_blank" href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fteradici%2Fpcoip-agent-azure-templates%2Fmaster%2Fazure-deploy-ga-windows2016.json"><img src="http://azuredeploy.net/deploybutton.png"/></a>
 
 
 Next follow these steps:
@@ -39,8 +39,8 @@ Next follow these steps:
     * *Resource group:* Select *Create new*, then enter a resource group name (for example *teradici_trial*).
     * *Location:* Select a location. 
         * Note: Teradici PCoIP Graphics agent deployments require locations that support NV instance types, currently this is limited to the following locations: EAST US, NORTH CENTRAL US, SOUTH CENTRAL US, SOUTHEAST ASIA, or WEST EUROPE.
-    * *Admin User:* Enter a username for your PCoIP session connection login. Do not use Admin.
-    * *Admin Password:* Enter a password.
+    * *User Name:* Enter a username for the virtual machine, this will be used for your PCoIP session connection login. Do not use *Admin*.
+    * *Password:* Enter a password for the virtual machine.
     * *Registration Code:* Enter the Registration code you received from Teradici.
 * Review the Microsoft Terms and Conditions. Indicate your agreement by selecting *I agree to the terms and conditions stated above*.
 * Enable *Pin to dashboard* if you wish to monitor the status of your deployment from the Azure dashboard.
@@ -59,7 +59,7 @@ Once deployment is complete, to connect to your deployed Teradici PCoIP agent fi
 
 From the Teradici PCoIP client, establish a connection to the virtual machine with the Teradici PCoIP agent you deployed on Azure:
 * Launch the Teradici PCoIP client and enter the IP address obtained above in the *Host Address* field, and click **Next**.
-* Enter the *Admin User* and *Password* credentials created above and login to the virtual machine.
+* Enter the *username* and *password* for the virtual machine created above, and click **Login**.
 * You now have access to a PCoIP cloud-delivered desktop.
 
 #### Known Issue(s)

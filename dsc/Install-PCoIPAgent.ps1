@@ -23,6 +23,8 @@ Configuration InstallPCoIPAgent
 	
     Node "localhost"
     {
+        VmUsability TheVmUsability
+
         LocalConfigurationManager
         {
             RebootNodeIfNeeded = $true
@@ -71,18 +73,9 @@ Configuration InstallPCoIPAgent
 
                 # treat returned code 0 and 1 as success
 				if (($ret.ExitCode -ne 0) -and ($ret.ExitCode -ne 1)) {
-					$errMsg = "Failed to install nvidia driver, exit code: " + $ret.ExitCode
-
-					if ($ret.StandardOutput -ne $null) {
-	                    $stdout = $ret.StandardOutput.ReadToEnd()
-						$errMsg = $errMsg + "; standard output: " + $stdout
-					}
-					if ($ret.StandardError -ne $null) {
-	                    $stderr = $ret.StandardError.ReadToEnd()
-						$errMsg = $errMsg + "; standard error: " + $stderr
-					}
-
-					$errMsg = $errMsg + "."
+                    $stdout = $ret.StandardOutput.ReadToEnd();
+                    $stderr = $ret.StandardError.ReadToEnd();
+					$errMsg = "Failed to install nvidia driver. standard output: " + $stdout + "; standard error: " + $stderr
 					Write-Verbose $errMsg
 					throw $errMsg
 				} else {
@@ -141,54 +134,6 @@ Configuration InstallPCoIPAgent
 					}
 				}
 				
-                $registrationCode = ($using:registrationCodeCredential).GetNetworkCredential().password
-                if ($registrationCode) {
-					# Insert a delay before activating license
-	                cd "C:\Program Files (x86)\Teradici\PCoIP Agent"
-
-					Write-Verbose "Activating License Code"               
- 	                $ret = & .\pcoip-register-host.ps1 -RegistrationCode $registrationCode
-					$isExeSucc = $?
-
-					if ($isExeSucc) {
-						Write-Verbose "succeeded to activate License Code." 
-					} else {
-						$retMsg = $ret | Out-String
-						$errMsg = "Failed to activate License Code because " + $retMsg
-						Write-Verbose  $errMsg              
-						throw $errMsg
-					}
-
-					Write-Verbose "Validating License"               
- 	                $ret = & .\pcoip-validate-license.ps1
-					$isExeSucc = $?
-
-					if ($isExeSucc) {
-						Write-Verbose "succeeded to validate License."
-					} else {
-						$retMsg = $ret | Out-String
-						$errMsg = "Failed to validate license because " + $retMsg
-						Write-Verbose  $errMsg              
-						throw $errMsg
-					}
-                }
-
-				if (!$using:isSA -and (Test-Path -path "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID\NvFBCEnable.exe")) {
-					Write-Verbose "reset grid for graphices agent."
-					
-					Write-Verbose "Stoping NVIDIA licensing service"
-					net stop nvsvc | Out-Null
-
-					Write-Verbose "Disabling GRID frame buffer capture support"
-					Start-Process -FilePath "NvFBCEnable.exe" -ArgumentList "-disable" -WorkingDirectory "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID" -Wait
-
-					Write-Verbose "Enabling GRID frame buffer capture support"
-					Start-Process -FilePath "NvFBCEnable.exe" -ArgumentList "-enable" -WorkingDirectory "C:\Program Files (x86)\Teradici\PCoIP Agent\GRID" -Wait
-
-					Write-Verbose "Enabling NVIDIA licensing service"
-					net start nvsvc	| Out-Null			
-				}
-
 	            Write-Verbose "Finished PCoIP Agent Installation"
             }
         }
@@ -258,10 +203,44 @@ Configuration InstallPCoIPAgent
 					$svc.Start()
 					$svc.WaitForStatus("Running", 120)
 				}
-
-
-
             }
+        }
+    }
+}
+
+Configuration VmUsability
+{
+    Node "localhost"
+    {
+        DisableServerManager TheDisableServerManager
+        InstallFirefox TheInstallFirefox
+    }
+}
+
+Configuration DisableServerManager
+{
+    Node "localhost"
+    {
+        Registry DisableServerManager
+        {
+            Ensure = "Present"
+            Key = "HKLM:\Software\Microsoft\ServerManager"
+            ValueName = "DoNotOpenServerManagerAtLogon"
+            ValueData = "1"
+            ValueType = "Dword"
+        }
+    }
+}
+
+Configuration InstallFirefox
+{
+    Import-DscResource -module xFirefox
+
+    Node "localhost"
+    {
+        MSFT_xFirefox InstallFirefox
+        {
+            #install the latest firefox browser
         }
     }
 }
