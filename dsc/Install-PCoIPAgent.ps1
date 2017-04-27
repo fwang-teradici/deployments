@@ -197,7 +197,12 @@ Configuration InstallPCoIPAgent
 					$svc.Continue()
 				}
 
-				if ( $svc.status -eq "Stopped" )	{
+				$reboot = $false
+                if (Test-Path variable:rebootRequired) {
+					$reboot = (Get-Variable -Name "rebootRequired" -Scope global).Value
+				}
+
+				if (!$reboot -and ($svc.status -eq "Stopped"))	{
 					Write-Verbose "Starting PCoIP Agent Service because it is at stopped status."
 					$svc.Start()
 					$svc.WaitForStatus("Running", 120)
