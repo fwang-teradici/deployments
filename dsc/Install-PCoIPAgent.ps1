@@ -215,7 +215,7 @@ Configuration InstallPCoIPAgent
 				#do not run this script by default
 				$ret = $true
 
-                if (Test-Path Test-Path variable:rebootRequired) {
+                if (Test-Path variable:rebootRequired) {
 					$ret = ! (Get-Variable -Name "rebootRequired" -Scope global).Value
 				}
 
@@ -224,6 +224,7 @@ Configuration InstallPCoIPAgent
 
             SetScript  = {
 				Write-Verbose "Request reboot machine after Installing pcoip agent."
+				Remove-Variable -Name "rebootRequired" -Scope global
 				$global:DSCMachineStatus = 1
 			}
 		}
