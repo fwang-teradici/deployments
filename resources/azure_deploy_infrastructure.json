@@ -1,0 +1,105 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "namePrefix": {
+      "type": "string",
+      "defaultValue": "pcoip-agent",
+      "metadata": {
+        "description": "name prefix which is used to build other resources name such as virtual network"
+      }
+    },
+    "_artifactsLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "The base location of resources, such as templates and DSC modules, that the template depends on"
+      }
+    }
+  },
+  "variables": {
+    "deploymentApiVersion": "2016-09-01",
+    "namePrefix": "[parameters('namePrefix')]",
+    "vnetName": "[concat(variables('namePrefix'), '-vnet')]",
+    "subnetName": "[concat(variables('namePrefix'), '-subnet')]",
+    "nsgName": "[concat(variables('namePrefix'), '-nsg')]",
+    "resourceLoc": "[concat(parameters('_artifactsLocation'), '/resources/')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "deployNsg",
+      "apiVersion": "[variables('deploymentApiVersion')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('resourceLoc'), 'pcoip_agent_nsg.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "nsgName": {
+            "value": "[variables('nsgName')]"
+          }
+        }
+      }
+    },
+
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "deployVNet",
+      "apiVersion": "[variables('deploymentApiVersion')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('resourceLoc'), 'virtual_network.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vnetName": {
+            "value": "[variables('vnetName')]"
+          },
+          "subnetName": {
+            "value": "[variables('subnetName')]"
+          }
+        }
+      }
+    },
+
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "deployNIC",
+      "apiVersion": "[variables('deploymentApiVersion')]",
+      "dependsOn": [
+        "deployNsg",
+        "deployVNet"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('resourceLoc'), 'network_interface_pubIP.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "namePrefix": {
+            "value": "[variables('namePrefix')]"
+          },
+          "nsgName": {
+            "value": "[variables('nsgName')]"
+          },
+          "vnetName": {
+            "value": "[variables('vnetName')]"
+          },
+          "subnetName": {
+            "value": "[variables('subnetName')]"
+          }
+        }
+      }
+    }
+  ],
+
+  "outputs": {
+    "vm_fqdn": {
+      "type": "string",
+      "value": "[reference('deployNIC').outputs.vm_fqdn.value]"
+    }
+  }
+}

@@ -24,6 +24,13 @@
         "description": "Virtual Machine Size."
       }
     },
+    "osType": {
+      "type": "string",
+      "defaultValue": "Windows Server 2016",
+      "metadata": {
+        "description": "Type of OS to use for VM."
+      }
+    },
     "registrationCode": {
       "type": "securestring",
       "minLength": 21,
@@ -154,6 +161,9 @@
           },
           "password": {
             "value": "[parameters('password')]"
+          },
+          "osType": {
+            "value": "[parameters('osType')]"
           },
           "vmSize": {
             "value": "[parameters('vmSize')]"

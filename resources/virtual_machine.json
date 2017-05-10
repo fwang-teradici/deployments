@@ -25,10 +25,11 @@
       "type": "string",
       "defaultValue": "Windows Server 2016",
       "allowedValues": [
-        "Windows Server 2016"
+        "Windows Server 2016",
+        "RHEL 7.2"
       ],
       "metadata": {
-        "description": "Type of OS to use for VMs: Windows."
+        "description": "Type of OS to use for VM."
       }
     },
     "vmSize": {
@@ -51,6 +52,12 @@
         "publisher": "MicrosoftWindowsServer",
         "offer": "WindowsServer",
         "sku": "2016-Datacenter",
+        "version": "latest"
+      },
+      "RHEL 7.2": {
+        "publisher": "RedHat",
+        "offer": "RHEL",
+        "sku": "7.2",
         "version": "latest"
       }
     },
