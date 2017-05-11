@@ -103,7 +103,7 @@
     },
     "nicName": {
       "type": "string",
-      "value": "[reference('deployNIC').outputs.nicName.valuev]"
+      "value": "[reference('deployNIC').outputs.nicName.value]"
     }
   }
 }
