@@ -100,6 +100,10 @@
     "vm_fqdn": {
       "type": "string",
       "value": "[reference('deployNIC').outputs.vm_fqdn.value]"
+    },
+    "nicName": {
+      "type": "string",
+      "value": "[reference('deployNIC').outputs.nicName.valuev]"
     }
   }
 }
