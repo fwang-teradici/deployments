@@ -87,6 +87,32 @@
           }
         }
       }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "deployVmDsc",
+      "apiVersion": "[variables('deploymentApiVersion')]",
+      "dependsOn": [
+        "deployVM"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('resourceLoc'), 'vm_pcoip_agent_linux_ext.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[reference('deployInfra').outputs.vmName.value]"
+          },
+          "registrationCode": {
+            "value": "[parameters('registrationCode')]"
+          },
+          "_artifactsLocation": {
+            "value": "[parameters('_artifactsLocation')]"
+          }
+        }
+      }
     }
   ],
 
