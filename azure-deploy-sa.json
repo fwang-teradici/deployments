@@ -4,9 +4,9 @@
   "parameters": {
     "osType": {
       "type": "string",
-      "defaultValue": "Windows 2016 Server",
+      "defaultValue": "Windows Server 2016",
       "allowedValues": [
-        "Windows 2016 Server",
+        "Windows Server 2016",
         "REHL 7"
       ],
       "metadata": {

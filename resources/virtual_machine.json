@@ -26,7 +26,7 @@
       "defaultValue": "Windows Server 2016",
       "allowedValues": [
         "Windows Server 2016",
-        "RHEL 7.2"
+        "RHEL 7"
       ],
       "metadata": {
         "description": "Type of OS to use for VM."
@@ -54,7 +54,7 @@
         "sku": "2016-Datacenter",
         "version": "latest"
       },
-      "RHEL 7.2": {
+      "RHEL 7": {
         "publisher": "RedHat",
         "offer": "RHEL",
         "sku": "7.2",
