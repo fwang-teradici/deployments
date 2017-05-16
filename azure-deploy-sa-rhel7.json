@@ -90,7 +90,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "deployVmDsc",
+      "name": "deployVmExt",
       "apiVersion": "[variables('deploymentApiVersion')]",
       "properties": {
         "mode": "Incremental",

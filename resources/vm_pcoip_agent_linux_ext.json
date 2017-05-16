@@ -36,7 +36,7 @@
         "typeHandlerVersion": "2.0",
         "autoUpgradeMinorVersion": true,
         "settings": {
-          "fileUris": [ "[concat(parameters('_artifactsLocation'), '/dsc', variables('scriptFileName'))]" ]
+          "fileUris": [ "[concat(parameters('_artifactsLocation'), '/dsc/', variables('scriptFileName'))]" ]
         },
         "protectedSettings": {
           "commandToExecute": "[concat(variables('scriptFileName'), ' ', parameters('registrationCode'))]"
