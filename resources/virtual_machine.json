@@ -18,7 +18,7 @@
     "password": {
       "type": "securestring",
       "metadata": {
-        "description": "Password for local admin account." 
+        "description": "Password for local admin account."
       }
     },
     "osType": {
@@ -109,5 +109,11 @@
         }
       }
     }
-  ]
+  ],
+  "outputs": {
+    "vmName": {
+      "type": "string",
+      "value": "[variables('vmSettings').vmNamePrefix]"
+    }
+  }
 }

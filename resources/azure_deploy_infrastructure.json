@@ -2,11 +2,47 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "userName": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 20,
+      "metadata": {
+        "description": "User Name for the Virtual Machine."
+      }
+    },
+    "password": {
+      "type": "securestring",
+      "minLength": 12,
+      "maxLength": 123,
+      "metadata": {
+        "description": "Password for the Virtual Machine."
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "metadata": {
+        "description": "Virtual Machine Size."
+      }
+    },
+    "osType": {
+      "type": "string",
+      "metadata": {
+        "description": "OS for Virtual Machine"
+      }
+    },
     "namePrefix": {
       "type": "string",
       "defaultValue": "pcoip-agent",
       "metadata": {
         "description": "name prefix which is used to build other resources name such as virtual network"
+      }
+    },
+    "rdPort": {
+      "type": "int",
+      "defaultValue": 3389,
+      "allowedValues": [ 3389, 22 ],
+      "metadata": {
+        "description": "Remote Desktop Connect Port Number, for windows it is RDP port, for Linux, it is SSH port."
       }
     },
     "_artifactsLocation": {
@@ -22,6 +58,7 @@
     "vnetName": "[concat(variables('namePrefix'), '-vnet')]",
     "subnetName": "[concat(variables('namePrefix'), '-subnet')]",
     "nsgName": "[concat(variables('namePrefix'), '-nsg')]",
+    "vmNamePrefix": "[concat(variables('namePrefix'), '-vm')]",
     "resourceLoc": "[concat(parameters('_artifactsLocation'), '/resources/')]"
   },
   "resources": [
@@ -38,6 +75,9 @@
         "parameters": {
           "nsgName": {
             "value": "[variables('nsgName')]"
+          },
+          "rdPort": {
+            "value": "[parameters('rdPort')]"
           }
         }
       }
@@ -93,6 +133,39 @@
           }
         }
       }
+    },
+
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "deployVM",
+      "apiVersion": "[variables('deploymentApiVersion')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('resourceLoc'), 'virtual_machine.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmNamePrefix": {
+            "value": "[variables('vmNamePrefix')]"
+          },
+          "userName": {
+            "value": "[parameters('userName')]"
+          },
+          "password": {
+            "value": "[parameters('password')]"
+          },
+          "osType": {
+            "value": "[parameters('osType')]"
+          },
+          "vmSize": {
+            "value": "[parameters('vmSize')]"
+          },
+          "nicName": {
+            "value": "[reference('deployNIC').outputs.nicName.value]"
+          }
+        }
+      }
     }
   ],
 
@@ -104,6 +177,10 @@
     "nicName": {
       "type": "string",
       "value": "[reference('deployNIC').outputs.nicName.value]"
+    },
+    "vmName": {
+      "type": "string",
+      "value": "[reference('deployVM').outputs.vmName.value]"
     }
   }
 }

@@ -7,7 +7,7 @@
       "defaultValue": "Windows 2016 Server",
       "allowedValues": [
         "Windows 2016 Server",
-        "Red Hat 7"
+        "REHL 7"
       ],
       "metadata": {
         "description": "OS for Virtual Machine."
@@ -44,7 +44,7 @@
       "Windows Server 2016": {
         "templeUrl": "[concat(variables('artifactsLocation'), '/azure-deploy-sa-windows2016.json')]"
       },
-      "RHEL 7.2": {
+      "REHL 7": {
         "templeUrl": "[concat(variables('artifactsLocation'), '/azure-deploy-sa-rhel7.json')]"
       }
     }
@@ -62,6 +62,9 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "osType": {
+            "value": "[parameters('osType')]"
+          },
           "userName": {
             "value": "[parameters('userName')]"
           },
