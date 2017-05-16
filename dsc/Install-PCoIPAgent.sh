@@ -22,5 +22,5 @@ sudo yum -y install pcoip-agent-standard
 
 # register license code
 echo "-->Register license code"
-pcoip-register-host --registration-code=@1
+pcoip-register-host --registration-code=$1
 pcoip-validate-license
