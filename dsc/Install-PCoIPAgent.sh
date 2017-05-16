@@ -2,6 +2,10 @@
 
 # the first argument is the Registration Code of PCoIP agent
 
+# Install desktop
+echo "-->Install desktop"
+sudo yum -y groupinstall "Server with GUI"
+
 # Install the Teradici package key
 echo "-->Install the Teradici package key"
 sudo rpm --import https://downloads.teradici.com/rhel/teradici.pub.gpg
