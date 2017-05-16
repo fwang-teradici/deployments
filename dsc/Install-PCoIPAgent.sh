@@ -13,7 +13,7 @@ sudo wget -O /etc/yum.repos.d/pcoip.repo https://downloads.teradici.com/rhel/pco
 # Install the EPEL repository
 echo "-->Install the EPEL repository"
 sudo wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-sudo rpm -i -q epel-release-latest-7.noarch.rpm
+sudo yum -y install epel-release-latest-7.noarch.rpm
 
 # Install the PCoIP Agent
 echo "-->Install the PCoIP Agent"
