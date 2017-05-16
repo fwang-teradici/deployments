@@ -92,9 +92,6 @@
       "type": "Microsoft.Resources/deployments",
       "name": "deployVmDsc",
       "apiVersion": "[variables('deploymentApiVersion')]",
-      "dependsOn": [
-        "deployVM"
-      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
