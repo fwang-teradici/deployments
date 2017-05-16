@@ -22,7 +22,7 @@ By clicking one of the *Deploy to Azure* buttons below you accept the terms of t
 
 To deploy a Teradici PCoIP **Standard** agent, on a [Standard_D2_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes-general)\* type virtual machine, click
     
-<a target="_blank" href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffwang-teradici%2Fdeployments%2Fmaster%2Fazure-deploy-sa-windows2016.json"><img src="http://azuredeploy.net/deploybutton.png"/></a>
+<a target="_blank" href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffwang-teradici%2Fdeployments%2Fmaster%2Fazure-deploy-sa.json"><img src="http://azuredeploy.net/deploybutton.png"/></a>
 
 #### Teradici PCoIP Graphics agent
 
