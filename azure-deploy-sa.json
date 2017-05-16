@@ -4,6 +4,7 @@
   "parameters": {
     "osType": {
       "type": "string",
+      "defaultValue": "Windows 2016 Server",
       "allowedValues": [
         "Windows 2016 Server",
         "Red Hat 7"
@@ -25,7 +26,7 @@
       "minLength": 12,
       "maxLength": 123,
       "metadata": {
-        "description": "Password of User to login Virtual Machine."
+        "description": "Password of user to login Virtual Machine."
       }
     },
     "registrationCode": {
