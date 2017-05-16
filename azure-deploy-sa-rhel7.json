@@ -27,7 +27,7 @@
     },
     "osType": {
       "type": "string",
-      "defaultValue": "REHL 7",
+      "defaultValue": "RHEL 7",
       "metadata": {
         "description": "OS for Virtual Machine"
       }

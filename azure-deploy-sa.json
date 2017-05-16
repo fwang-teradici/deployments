@@ -7,7 +7,7 @@
       "defaultValue": "Windows Server 2016",
       "allowedValues": [
         "Windows Server 2016",
-        "REHL 7"
+        "RHEL 7"
       ],
       "metadata": {
         "description": "OS for Virtual Machine."
@@ -44,7 +44,7 @@
       "Windows Server 2016": {
         "templeUrl": "[concat(variables('artifactsLocation'), '/azure-deploy-sa-windows2016.json')]"
       },
-      "REHL 7": {
+      "RHEL 7": {
         "templeUrl": "[concat(variables('artifactsLocation'), '/azure-deploy-sa-rhel7.json')]"
       }
     }
