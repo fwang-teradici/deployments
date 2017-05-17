@@ -124,8 +124,9 @@ Configuration InstallPCoIPAgent
 				if ($ret.ExitCode -ne 0) {
 					#exit code 1641 means requiring reboot machine after intallation is done, other non zere exit code means installation has some error
 					if ($ret.ExitCode -eq $EXIT_CODE_REBOOT) {
-						Write-Verbose "Machine reboot required."
-						Set-Variable -Name "rebootRequired" -Value $true -Scope global
+						Write-Verbose "Request reboot machine after Installing pcoip agent."
+						# Setting the global:DSCMachineStatus = 1 tells DSC that a reboot is required
+						$global:DSCMachineStatus = 1
 					} else {
 						$errMsg = "Failed to install PCoIP Agent. Exit Code: " + $ret.ExitCode
 						Write-Verbose $errMsg
@@ -137,11 +138,11 @@ Configuration InstallPCoIPAgent
             }
         }
 
-        Script Register_Agent_License_Code
+        Script Register
         {
             DependsOn  = @("[Script]Install_PCoIPAgent")
 
-            GetScript  = { return 'registerAgentLicenseCode'}
+            GetScript  = { return 'registration'}
             
             TestScript = { 
                 cd "C:\Program Files (x86)\Teradici\PCoIP Agent"
@@ -197,42 +198,13 @@ Configuration InstallPCoIPAgent
 					$svc.Continue()
 				}
 
-				$reboot = $false
-                if (Test-Path variable:rebootRequired) {
-					$reboot = (Get-Variable -Name "rebootRequired" -Scope global).Value
-				}
-
-				if (!$reboot -and ($svc.status -eq "Stopped"))	{
+				if ( $svc.status -eq "Stopped" )	{
 					Write-Verbose "Starting PCoIP Agent Service because it is at stopped status."
 					$svc.Start()
 					$svc.WaitForStatus("Running", 120)
 				}
             }
         }
-
-		Script Reboot_Machine
-		{
-            DependsOn  = @("[Script]Register_Agent_License_Code")
-
-            GetScript  = { return 'rebootMachine'}
-            
-            TestScript = { 
-				#do not run this script by default
-				$ret = $true
-
-                if (Test-Path variable:rebootRequired) {
-					$ret = ! (Get-Variable -Name "rebootRequired" -Scope global).Value
-				}
-
-				return $ret
-            }
-
-            SetScript  = {
-				Write-Verbose "Request reboot machine after Installing pcoip agent."
-				Remove-Variable -Name "rebootRequired" -Scope global
-				$global:DSCMachineStatus = 1
-			}
-		}
     }
 }
 
