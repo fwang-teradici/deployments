@@ -2,12 +2,9 @@
 
 # the first argument is the Registration Code of PCoIP agent
 
-# Install desktop
+# Install Desktop
 echo "-->Install desktop"
-# install the whole GUI and Additional Tools
-# sudo yum -y groupinstall "Server with GUI"
-# just install the gnome desktop 
-sudo yum -y groupinstall 'X Window System' 'GNOME'
+sudo yum -y groupinstall "Server with GUI"
 
 # Install the Teradici package key
 echo "-->Install the Teradici package key"
@@ -30,6 +27,7 @@ for idx in {1..3}
 do
     sudo yum -y install pcoip-agent-standard
     exitCode=$?
+    
     if [ $exitCode -eq 0 ]
     then
         break
@@ -50,9 +48,9 @@ echo "-->Register license code"
 for idx in {1..3}
 do
     pcoip-register-host --registration-code=$1
-    pcoip-validate-license
-    
+    pcoip-validate-license    
     exitCode=$?
+    
     if [ $exitCode -eq 0 ]
     then
         break
@@ -66,9 +64,14 @@ do
 done
 
 # skip the gnome initial setup
-mkdir -p  ~/.config
-echo "yes" >> ~/.config/gnome-initial-setup-done
+echo "-->create file gnome-initial-setup-done to skip gnoe initial setup"
+sudo mkdir -p /etc/skel/.config
+echo "yes" | sudo tee /etc/skel/.config/gnome-initial-setup-done
 
 # start GUI
+echo "-->set default graphical target"
 sudo systemctl set-default graphical.target
+
+echo "-->start graphical target"
 sudo systemctl start graphical.target
+sudo reboot
