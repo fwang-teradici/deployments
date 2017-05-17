@@ -7,7 +7,7 @@ echo "-->Install desktop"
 # install the whole GUI and Additional Tools
 # sudo yum -y groupinstall "Server with GUI"
 # just install the gnome desktop 
-sudo yum groupinstall 'X Window System' 'GNOME'
+sudo yum -y groupinstall 'X Window System' 'GNOME'
 
 # Install the Teradici package key
 echo "-->Install the Teradici package key"
@@ -30,11 +30,11 @@ for idx in {1..3}
 do
     sudo yum -y install pcoip-agent-standard
     exitCode=$?
-    if [$exitCode -eq 0]
+    if [ $exitCode -eq 0 ]
     then
         break
     else
-        if [$idx -eq 3]
+        if [ $idx -eq 3 ]
         then
             echo "failed to install pcoip agent."
             exit $exitCode
@@ -51,11 +51,13 @@ for idx in {1..3}
 do
     pcoip-register-host --registration-code=$1
     pcoip-validate-license
-    if [$exitCode -eq 0]
+    
+    exitCode=$?
+    if [ $exitCode -eq 0 ]
     then
         break
     else
-        if [$idx -eq 3]
+        if [ $idx -eq 3 ]
         then
             echo "failed to register pcoip agent license."
             exit $exitCode
@@ -64,7 +66,7 @@ do
 done
 
 # skip the gnome initial setup
-mkdir ~/.config
+mkdir -p  ~/.config
 echo "yes" >> ~/.config/gnome-initial-setup-done
 
 # start GUI
