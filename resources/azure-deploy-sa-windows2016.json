@@ -24,17 +24,23 @@
       "metadata": {
         "description": "PCoIP Standard Agent License Registration Code."
       }
+    },
+    "_artifactsLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "The base location of resources, such as templates and DSC modules, that the template depends on"
+      }
     }
   },
   "variables": {
     "deploymentApiVersion": "2016-09-01",
-    "artifactsLocation": "https://raw.githubusercontent.com/fwang-teradici/deployments/master",
+    "artifactsLocation": "[parameters('_artifactsLocation')]",
     "binaryLocation": "https://binarystore.blob.core.windows.net"
   },
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "deployAgent",
+      "name": "deployWindowsAgent",
       "apiVersion": "[variables('deploymentApiVersion')]",
       "properties": {
         "mode": "Incremental",
@@ -69,7 +75,7 @@
   "outputs": {
     "vm_fqdn": {
       "type": "string",
-      "value": "[reference('deployAgent').outputs.vm_fqdn.value]"
+      "value": "[reference('deployWindowsAgent').outputs.vm_fqdn.value]"
     }
   }
 }

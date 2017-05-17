@@ -65,8 +65,11 @@ done
 
 # skip the gnome initial setup
 echo "-->create file gnome-initial-setup-done to skip gnoe initial setup"
-sudo mkdir -p /etc/skel/.config
-echo "yes" | sudo tee /etc/skel/.config/gnome-initial-setup-done
+for homeDir in $( find /home -mindepth 1 -maxdepth 1 -type d )
+do 
+    sudo mkdir -p $homeDir/.config
+    echo "yes" | sudo tee $homeDir/.config/gnome-initial-setup-done
+done
 
 # start GUI
 echo "-->set default graphical target"

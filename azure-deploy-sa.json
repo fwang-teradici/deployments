@@ -18,7 +18,7 @@
       "minLength": 2,
       "maxLength": 20,
       "metadata": {
-        "description": "User Name to login Virtual Machine."
+        "description": "User Name for the Virtual Machine."
       }
     },
     "password": {
@@ -26,7 +26,7 @@
       "minLength": 12,
       "maxLength": 123,
       "metadata": {
-        "description": "Password of user to login Virtual Machine."
+        "description": "Password for the Virtual Machine."
       }
     },
     "registrationCode": {
@@ -42,10 +42,10 @@
     "artifactsLocation": "https://raw.githubusercontent.com/fwang-teradici/deployments/master",
     "osConfigs": {
       "Windows Server 2016": {
-        "templeUrl": "[concat(variables('artifactsLocation'), '/azure-deploy-sa-windows2016.json')]"
+        "templeUrl": "[concat(variables('artifactsLocation'), '/resources/azure-deploy-sa-windows2016.json')]"
       },
       "RHEL 7": {
-        "templeUrl": "[concat(variables('artifactsLocation'), '/azure-deploy-sa-rhel7.json')]"
+        "templeUrl": "[concat(variables('artifactsLocation'), '/resources/azure-deploy-sa-rhel7.json')]"
       }
     }
   },
@@ -62,9 +62,6 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "osType": {
-            "value": "[parameters('osType')]"
-          },
           "userName": {
             "value": "[parameters('userName')]"
           },
