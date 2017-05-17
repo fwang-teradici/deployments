@@ -55,12 +55,12 @@
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "deployVM",
+      "name": "deployInfraVM",
       "apiVersion": "[variables('deploymentApiVersion')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('resourceLoc'), 'azure_deploy_vm.json')]",
+          "uri": "[concat(variables('resourceLoc'), 'azure_deploy_infra_vm.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -100,7 +100,7 @@
         },
         "parameters": {
           "vmName": {
-            "value": "[reference('deployVM').outputs.vmName.value]"
+            "value": "[reference('deployInfraVM').outputs.vmName.value]"
           },
           "registrationCode": {
             "value": "[parameters('registrationCode')]"
@@ -116,11 +116,11 @@
   "outputs": {
     "vm_fqdn": {
       "type": "string",
-      "value": "[reference('deployVM').outputs.vm_fqdn.value]"
+      "value": "[reference('deployInfraVM').outputs.vm_fqdn.value]"
     },
     "vmName": {
       "type": "string",
-      "value": "[reference('deployVM').outputs.vmName.value]"
+      "value": "[reference('deployInfraVM').outputs.vmName.value]"
     }
   }
 }
