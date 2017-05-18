@@ -18,6 +18,13 @@
         "description": "Password for the Virtual Machine."
       }
     },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2_v2",
+      "metadata": {
+        "description": "Virtual Machine Size."
+      }
+    },
     "registrationCode": {
       "type": "securestring",
       "minLength": 21,
@@ -34,18 +41,19 @@
   },
   "variables": {
     "deploymentApiVersion": "2016-09-01",
-    "artifactsLocation": "[parameters('_artifactsLocation')]",
-    "binaryLocation": "https://binarystore.blob.core.windows.net"
+    "binaryLocation": "https://binarystore.blob.core.windows.net",
+    "namePrefix": "pcoip-agent",
+    "resourceLoc": "[concat(parameters('_artifactsLocation'), '/resources/')]"
   },
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "deployWindowsAgent",
+      "name": "deployInfraVM",
       "apiVersion": "[variables('deploymentApiVersion')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('artifactsLocation'),'/resources/azure_deploy.json')]",
+          "uri": "[concat(variables('resourceLoc'), 'azure_deploy_infra_vm.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -55,8 +63,38 @@
           "password": {
             "value": "[parameters('password')]"
           },
+          "osType": {
+            "value": "Windows Server 2016"
+          },
           "vmSize": {
-            "value": "Standard_D2_v2"
+            "value": "[parameters('vmSize')]"
+          },
+          "namePrefix": {
+            "value": "[variables('namePrefix')]"
+          },
+          "rdPort": {
+            "value": 3389
+          },
+          "_artifactsLocation": {
+            "value": "[parameters('_artifactsLocation')]"
+          }
+        }
+      }
+    },
+
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "deployVmDsc",
+      "apiVersion": "[variables('deploymentApiVersion')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('resourceLoc'), 'vm_pcoip_agent_dsc.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[reference('deployInfraVM').outputs.vmName.value]"
           },
           "pcoipAgentInstallerUrl": {
             "value": "[concat(variables('binaryLocation'), '/agents/2.8/PCoIP_agent_release_installer_2.8.0.5813_standard.exe')]"
@@ -65,7 +103,7 @@
             "value": "[parameters('registrationCode')]"
           },
           "_artifactsLocation": {
-            "value": "[variables('artifactsLocation')]"
+            "value": "[parameters('_artifactsLocation')]"
           }
         }
       }
@@ -75,7 +113,11 @@
   "outputs": {
     "vm_fqdn": {
       "type": "string",
-      "value": "[reference('deployWindowsAgent').outputs.vm_fqdn.value]"
+      "value": "[reference('deployInfraVM').outputs.vm_fqdn.value]"
+    },
+    "vmName": {
+      "type": "string",
+      "value": "[reference('deployInfraVM').outputs.vmName.value]"
     }
   }
 }

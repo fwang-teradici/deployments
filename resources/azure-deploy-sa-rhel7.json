@@ -25,13 +25,6 @@
         "description": "Virtual Machine Size."
       }
     },
-    "osType": {
-      "type": "string",
-      "defaultValue": "RHEL 7",
-      "metadata": {
-        "description": "OS for Virtual Machine"
-      }
-    },
     "registrationCode": {
       "type": "securestring",
       "minLength": 21,
@@ -71,7 +64,7 @@
             "value": "[parameters('password')]"
           },
           "osType": {
-            "value": "[parameters('osType')]"
+            "value": "RHEL 7"
           },
           "vmSize": {
             "value": "[parameters('vmSize')]"
