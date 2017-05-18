@@ -2,10 +2,6 @@
 
 # the first argument is the Registration Code of PCoIP agent
 
-# Install Desktop
-echo "-->Install desktop"
-sudo yum -y groupinstall "Server with GUI"
-
 # Install the Teradici package key
 echo "-->Install the Teradici package key"
 sudo rpm --import https://downloads.teradici.com/rhel/teradici.pub.gpg
@@ -63,18 +59,25 @@ do
     fi
 done
 
+# Install Desktop
+echo "-->Install desktop"
+# sudo yum -y groupinstall "Server with GUI"
+sudo yum -y groupinstall 'X Window System' 'GNOME'
+
+echo "-->set default graphical target"
+# The below command will change runlevel from runlevel 3 to runelevel 5 
+sudo systemctl set-default graphical.target
+
 # skip the gnome initial setup
 echo "-->create file gnome-initial-setup-done to skip gnoe initial setup"
 for homeDir in $( find /home -mindepth 1 -maxdepth 1 -type d )
 do 
-    sudo mkdir -p $homeDir/.config
-    echo "yes" | sudo tee $homeDir/.config/gnome-initial-setup-done
+    confDir=$homeDir/.config
+    sudo mkdir -p $confDir
+    sudo chmod 777 $confDir
+    echo "yes" | sudo tee $confDir/gnome-initial-setup-done
+    sudo chmod 777 $confDir/gnome-initial-setup-done
 done
-
-# start GUI
-echo "-->set default graphical target"
-sudo systemctl set-default graphical.target
 
 echo "-->start graphical target"
 sudo systemctl start graphical.target
-sudo reboot
