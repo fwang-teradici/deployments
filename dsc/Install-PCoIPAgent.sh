@@ -4,26 +4,24 @@
 
 # Install the Teradici package key
 echo "-->Install the Teradici package key"
-rpm --import https://downloads.teradici.com/rhel/teradici.pub.gpg
+sudo rpm --import https://downloads.teradici.com/rhel/teradici.pub.gpg
 
 # Add the Teradici repository
 echo "-->Add the Teradici repository"
-wget -O /etc/yum.repos.d/pcoip.repo https://downloads.teradici.com/rhel/pcoip.repo
+sudo wget -O /etc/yum.repos.d/pcoip.repo https://downloads.teradici.com/rhel/pcoip.repo
 
-# Update the EPEL repository
-echo "-->Update the EPEL repository"
-rpm -Uvh --quiet https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-
-#wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-#yum -y install epel-release-latest-7.noarch.rpm
+# Install the EPEL repository
+echo "-->Install the EPEL repository"
+sudo wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo yum -y install epel-release-latest-7.noarch.rpm
 
 # Install the PCoIP Agent
 echo "-->Install the PCoIP Agent"
-yum -y update
+sudo yum -y update
 
 for idx in {1..3}
 do
-    yum -y install pcoip-agent-standard
+    sudo yum -y install pcoip-agent-standard
     exitCode=$?
     
     if [ $exitCode -eq 0 ]
@@ -35,7 +33,7 @@ do
             echo "failed to install pcoip agent."
             exit $exitCode
         else
-            yum -y remove pcoip-agent-standard
+            sudo yum -y remove pcoip-agent-standard
         fi
     fi
 done
@@ -63,23 +61,23 @@ done
 
 # Install Desktop
 echo "-->Install desktop"
-# yum -y groupinstall "Server with GUI"
-yum -y groupinstall 'X Window System' 'GNOME'
+# sudo yum -y groupinstall "Server with GUI"
+sudo yum -y groupinstall 'X Window System' 'GNOME'
 
 echo "-->set default graphical target"
 # The below command will change runlevel from runlevel 3 to runelevel 5 
-systemctl set-default graphical.target
+sudo systemctl set-default graphical.target
 
 # skip the gnome initial setup
 echo "-->create file gnome-initial-setup-done to skip gnoe initial setup"
 for homeDir in $( find /home -mindepth 1 -maxdepth 1 -type d )
 do 
     confDir=$homeDir/.config
-    mkdir -p $confDir
-    chmod 777 $confDir
-    echo "yes" | $confDir/gnome-initial-setup-done
-    chmod 777 $confDir/gnome-initial-setup-done
+    sudo mkdir -p $confDir
+    sudo chmod 777 $confDir
+    echo "yes" | sudo tee $confDir/gnome-initial-setup-done
+    sudo chmod 777 $confDir/gnome-initial-setup-done
 done
 
 echo "-->start graphical target"
-systemctl start graphical.target
+sudo systemctl start graphical.target
