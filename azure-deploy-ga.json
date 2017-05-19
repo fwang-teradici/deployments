@@ -2,6 +2,17 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "osType": {
+      "type": "string",
+      "defaultValue": "Windows Server 2016",
+      "allowedValues": [
+        "Windows Server 2016",
+        "RHEL 7"
+      ],
+      "metadata": {
+        "description": "OS for Virtual Machine."
+      }
+    },
     "userName": {
       "type": "string",
       "minLength": 2,
@@ -22,15 +33,23 @@
       "type": "securestring",
       "minLength": 21,
       "metadata": {
-        "description": "PCoIP Graphics Agent License Registration Code."
+        "description": "PCoIP Standard Agent License Registration Code."
       }
     }
   },
   "variables": {
     "deploymentApiVersion": "2016-09-01",
     "artifactsLocation": "https://raw.githubusercontent.com/fwang-teradici/deployments/master",
-    "binaryLocation": "https://binarystore.blob.core.windows.net"
+    "osConfigs": {
+      "Windows Server 2016": {
+        "templeUrl": "[concat(variables('artifactsLocation'), '/resources/azure-deploy-ga-windows2016.json')]"
+      },
+      "RHEL 7": {
+        "templeUrl": "[concat(variables('artifactsLocation'), '/resources/azure-deploy-ga-rhel7.json')]"
+      }
+    }
   },
+
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
@@ -39,7 +58,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('artifactsLocation'), '/resources/', 'azure_deploy.json')]",
+          "uri": "[variables('osConfigs')[parameters('osType')]['templeUrl']]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -48,15 +67,6 @@
           },
           "password": {
             "value": "[parameters('password')]"
-          },
-          "vmSize": {
-            "value": "Standard_NV6"
-          },
-          "pcoipAgentInstallerUrl": {
-            "value": "[concat(variables('binaryLocation'), '/agents/2.8/PCoIP_agent_release_installer_2.8.0.6123_graphics.exe')]"
-          },
-          "videoDriverUrl": {
-            "value": "[concat(variables('binaryLocation'), '/thirdparty/nvidia/369.95_grid_win10_server2016_64bit_international.exe')]"
           },
           "registrationCode": {
             "value": "[parameters('registrationCode')]"

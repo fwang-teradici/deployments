@@ -97,7 +97,7 @@
             "value": "[reference('deployInfraVM').outputs.vmName.value]"
           },
           "pcoipAgentInstallerUrl": {
-            "value": "[concat(variables('binaryLocation'), '/agents/2.8/PCoIP_agent_release_installer_2.8.0.5813_standard.exe')]"
+            "value": "[concat(variables('binaryLocation'), '/agents/2.8/PCoIP_agent_release_installer_2.8.0.6123_standard.exe')]"
           },
           "registrationCode": {
             "value": "[parameters('registrationCode')]"

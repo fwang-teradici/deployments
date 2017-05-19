@@ -7,7 +7,7 @@
       "minLength": 2,
       "maxLength": 20,
       "metadata": {
-        "description": "Username for the Virtual Machine."
+        "description": "User Name for the Virtual Machine."
       }
     },
     "password": {
@@ -20,15 +20,9 @@
     },
     "vmSize": {
       "type": "string",
+      "defaultValue": "Standard_NV6",
       "metadata": {
         "description": "Virtual Machine Size."
-      }
-    },
-    "osType": {
-      "type": "string",
-      "defaultValue": "Windows Server 2016",
-      "metadata": {
-        "description": "Type of OS to use for VM."
       }
     },
     "registrationCode": {
@@ -36,20 +30,6 @@
       "minLength": 21,
       "metadata": {
         "description": "PCoIP Standard Agent License Registration Code."
-      }
-    },
-    "videoDriverUrl": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "The URL from which video driver for virtual machine will be downloaded, only required for the Graphics Agent."
-      }
-    },
-    "pcoipAgentInstallerUrl": {
-      "type": "string",
-      "minLength": 13,
-      "metadata": {
-        "description": "The URL from which pciop agent installer will be downloaded."
       }
     },
     "_artifactsLocation": {
@@ -61,6 +41,7 @@
   },
   "variables": {
     "deploymentApiVersion": "2016-09-01",
+    "artifactsLocation": "[parameters('_artifactsLocation')]",
     "namePrefix": "pcoip-agent",
     "resourceLoc": "[concat(parameters('_artifactsLocation'), '/resources/')]"
   },
@@ -83,7 +64,7 @@
             "value": "[parameters('password')]"
           },
           "osType": {
-            "value": "[parameters('osType')]"
+            "value": "RHEL 7"
           },
           "vmSize": {
             "value": "[parameters('vmSize')]"
@@ -92,7 +73,7 @@
             "value": "[variables('namePrefix')]"
           },
           "rdPort": {
-            "value": 3389
+            "value": 22
           },
           "_artifactsLocation": {
             "value": "[parameters('_artifactsLocation')]"
@@ -100,29 +81,25 @@
         }
       }
     },
-
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "deployVmDsc",
+      "name": "deployVmExt",
       "apiVersion": "[variables('deploymentApiVersion')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('resourceLoc'), 'vm_pcoip_agent_dsc.json')]",
+          "uri": "[concat(variables('resourceLoc'), 'vm_pcoip_agent_linux_ext.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "vmName": {
             "value": "[reference('deployInfraVM').outputs.vmName.value]"
           },
-          "pcoipAgentInstallerUrl": {
-            "value": "[parameters('pcoipAgentInstallerUrl')]"
-          },
-          "videoDriverUrl": {
-            "value": "[parameters('videoDriverUrl')]"
-          },
           "registrationCode": {
             "value": "[parameters('registrationCode')]"
+          },
+          "agentType": {
+            "value": "Graphics"
           },
           "_artifactsLocation": {
             "value": "[parameters('_artifactsLocation')]"
