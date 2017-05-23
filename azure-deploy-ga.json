@@ -39,15 +39,7 @@
   },
   "variables": {
     "deploymentApiVersion": "2016-09-01",
-    "artifactsLocation": "https://raw.githubusercontent.com/fwang-teradici/deployments/master",
-    "osConfigs": {
-      "Windows Server 2016": {
-        "templeUrl": "[concat(variables('artifactsLocation'), '/resources/azure-deploy-ga-windows2016.json')]"
-      },
-      "RHEL 7": {
-        "templeUrl": "[concat(variables('artifactsLocation'), '/resources/azure-deploy-ga-rhel7.json')]"
-      }
-    }
+    "artifactsLocation": "https://raw.githubusercontent.com/fwang-teradici/deployments/master"
   },
 
   "resources": [
@@ -58,15 +50,21 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('osConfigs')[parameters('osType')]['templeUrl']]",
+          "uri": "[concat(variables('artifactsLocation'), '/resources/azure-deploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "osType": {
+            "value": "[parameters('osType')]"
+          },
           "userName": {
             "value": "[parameters('userName')]"
           },
           "password": {
             "value": "[parameters('password')]"
+          },
+          "agentType": {
+            "value": "Graphics"
           },
           "registrationCode": {
             "value": "[parameters('registrationCode')]"

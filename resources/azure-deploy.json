@@ -2,6 +2,17 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "osType": {
+      "type": "string",
+      "defaultValue": "Windows Server 2016",
+      "allowedValues": [
+        "Windows Server 2016",
+        "RHEL 7"
+      ],
+      "metadata": {
+        "description": "OS for Virtual Machine."
+      }
+    },
     "userName": {
       "type": "string",
       "minLength": 2,
@@ -20,9 +31,20 @@
     },
     "vmSize": {
       "type": "string",
-      "defaultValue": "Standard_NV6",
+      "defaultValue": "Standard_D2_v2",
       "metadata": {
         "description": "Virtual Machine Size."
+      }
+    },
+    "agentType": {
+      "type": "string",
+      "defaultValue": "Standard",
+      "allowedValues": [
+        "Standard",
+        "Graphics"
+      ],
+      "metadata": {
+        "description": "PCoIP Agent Type: Standard or Graphics."
       }
     },
     "registrationCode": {
@@ -41,9 +63,17 @@
   },
   "variables": {
     "deploymentApiVersion": "2016-09-01",
-    "artifactsLocation": "[parameters('_artifactsLocation')]",
     "namePrefix": "pcoip-agent",
-    "resourceLoc": "[concat(parameters('_artifactsLocation'), '/resources/')]"
+    "resourceLoc": "[concat(parameters('_artifactsLocation'), '/resources/')]",
+    "osConfigs": {
+      "Windows Server 2016": {
+        "extensionFile": "vm_pcoip_agent_dsc.json"
+      },
+      "RHEL 7": {
+        "extensionFile": "vm_pcoip_agent_linux_ext.json"
+      }
+    },
+    "extensionFileUrl": "[concat(variables('resourceLoc'), variables('osConfigs')[parameters('osType')].extensionFile)]"
   },
   "resources": [
     {
@@ -88,7 +118,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('resourceLoc'), 'vm_pcoip_agent_linux_ext.json')]",
+          "uri": "[variables('extensionFileUrl')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -99,7 +129,7 @@
             "value": "[parameters('registrationCode')]"
           },
           "agentType": {
-            "value": "Graphics"
+            "value": "[parameters('agentType')]"
           },
           "_artifactsLocation": {
             "value": "[parameters('_artifactsLocation')]"

@@ -50,12 +50,11 @@ do
     then
         break
     else
+        sudo yum -y remove pcoip-agent-graphics
         if [ $idx -eq 3 ]
         then
             echo "failed to install pcoip agent."
             exit $exitCode
-        else
-            sudo yum -y remove pcoip-agent-graphics
         fi
     fi
 done
@@ -104,5 +103,5 @@ done
 echo "-->start graphical target"
 sudo systemctl start graphical.target
 
-sudo shutdown -r +2
+sudo shutdown -r +1
 exit 0
