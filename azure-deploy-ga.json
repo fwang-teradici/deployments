@@ -66,6 +66,9 @@
           "agentType": {
             "value": "Graphics"
           },
+          "vmSize": {
+            "value": "Standard_NV6"
+          },
           "registrationCode": {
             "value": "[parameters('registrationCode')]"
           },

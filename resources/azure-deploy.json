@@ -67,13 +67,16 @@
     "resourceLoc": "[concat(parameters('_artifactsLocation'), '/resources/')]",
     "osConfigs": {
       "Windows Server 2016": {
+        "rdPort": 3389,
         "extensionFile": "vm_pcoip_agent_dsc.json"
       },
       "RHEL 7": {
+        "rdPort": 22,
         "extensionFile": "vm_pcoip_agent_linux_ext.json"
       }
     },
-    "extensionFileUrl": "[concat(variables('resourceLoc'), variables('osConfigs')[parameters('osType')].extensionFile)]"
+    "extensionFileUrl": "[concat(variables('resourceLoc'), variables('osConfigs')[parameters('osType')].extensionFile)]",
+    "rdPort": "[variables('osConfigs')[parameters('osType')].rdPort]"
   },
   "resources": [
     {
@@ -87,14 +90,14 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "osType": {
+            "value": "[parameters('osType')]"
+          },
           "userName": {
             "value": "[parameters('userName')]"
           },
           "password": {
             "value": "[parameters('password')]"
-          },
-          "osType": {
-            "value": "RHEL 7"
           },
           "vmSize": {
             "value": "[parameters('vmSize')]"
@@ -103,7 +106,7 @@
             "value": "[variables('namePrefix')]"
           },
           "rdPort": {
-            "value": 22
+            "value": "[variables('rdPort')]"
           },
           "_artifactsLocation": {
             "value": "[parameters('_artifactsLocation')]"

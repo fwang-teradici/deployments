@@ -103,5 +103,5 @@ done
 echo "-->start graphical target"
 sudo systemctl start graphical.target
 
-sudo shutdown -r +2
+sudo shutdown -r +1
 exit 0

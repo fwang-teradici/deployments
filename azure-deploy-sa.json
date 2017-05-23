@@ -66,6 +66,9 @@
           "agentType": {
             "value": "Standard"
           },
+          "vmSize": {
+            "value": "Standard_D2_v2"
+          },
           "registrationCode": {
             "value": "[parameters('registrationCode')]"
           },
