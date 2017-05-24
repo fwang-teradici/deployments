@@ -2,7 +2,7 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "osType": {
+    "operatingSystem": {
       "type": "string",
       "defaultValue": "Windows Server 2016",
       "allowedValues": [
@@ -55,7 +55,7 @@
         },
         "parameters": {
           "osType": {
-            "value": "[parameters('osType')]"
+            "value": "[parameters('operatingSystem')]"
           },
           "userName": {
             "value": "[parameters('userName')]"

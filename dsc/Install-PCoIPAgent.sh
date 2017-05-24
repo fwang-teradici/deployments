@@ -2,18 +2,27 @@
 
 # the first argument is the Registration Code of PCoIP agent
 
+# Install the EPEL repository
+echo "-->Install the EPEL repository"
+sudo rpm -Uvh --quiet https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+exitCode=$?
+if [ $exitCode -ne 0 ]
+    echo "failed to download epel-release."
+    exit 1
+fi
+
 # Install the Teradici package key
 echo "-->Install the Teradici package key"
 sudo rpm --import https://downloads.teradici.com/rhel/teradici.pub.gpg
 
 # Add the Teradici repository
 echo "-->Add the Teradici repository"
-sudo wget -O /etc/yum.repos.d/pcoip.repo https://downloads.teradici.com/rhel/pcoip.repo
-
-# Install the EPEL repository
-echo "-->Install the EPEL repository"
-sudo wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-sudo yum -y install epel-release-latest-7.noarch.rpm
+sudo wget --retry-connrefused --tries=3 --waitretry=5 -O /etc/yum.repos.d/pcoip.repo https://downloads.teradici.com/rhel/pcoip.repo
+exitCode=$?
+if [ $exitCode -ne 0 ]
+    echo "failed to add teradici repository."
+    exit 1
+fi
 
 # Install the PCoIP Agent
 echo "-->Install the PCoIP Agent"
@@ -28,12 +37,16 @@ do
     then
         break
     else
+        #delay 5 seconds
+        sleep 5
         sudo yum -y remove pcoip-agent-standard
         if [ $idx -eq 3 ]
         then
             echo "failed to install pcoip agent."
             exit $exitCode
         fi
+        #delay 5 seconds        
+        sleep 5
     fi
 done
     
@@ -68,7 +81,7 @@ echo "-->set default graphical target"
 sudo systemctl set-default graphical.target
 
 # skip the gnome initial setup
-echo "-->create file gnome-initial-setup-done to skip gnoe initial setup"
+echo "-->create file gnome-initial-setup-done to skip gnome desktop initial setup"
 for homeDir in $( find /home -mindepth 1 -maxdepth 1 -type d )
 do 
     confDir=$homeDir/.config
