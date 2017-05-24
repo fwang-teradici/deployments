@@ -5,11 +5,6 @@
 # Install the EPEL repository
 echo "-->Install the EPEL repository"
 sudo rpm -Uvh --quiet https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-exitCode=$?
-if [ $exitCode -ne 0 ]
-    echo "failed to download epel-release."
-    exit 1
-fi
 
 # Install the Teradici package key
 echo "-->Install the Teradici package key"
@@ -20,6 +15,7 @@ echo "-->Add the Teradici repository"
 sudo wget --retry-connrefused --tries=3 --waitretry=5 -O /etc/yum.repos.d/pcoip.repo https://downloads.teradici.com/rhel/pcoip.repo
 exitCode=$?
 if [ $exitCode -ne 0 ]
+then
     echo "failed to add teradici repository."
     exit 1
 fi
@@ -75,6 +71,10 @@ done
 echo "-->Install desktop"
 # sudo yum -y groupinstall "Server with GUI"
 sudo yum -y groupinstall 'X Window System' 'GNOME'
+
+# install firefox
+echo "-->Install firefox"
+sudo yum -y install firefox
 
 echo "-->set default graphical target"
 # The below command will change runlevel from runlevel 3 to runelevel 5 
