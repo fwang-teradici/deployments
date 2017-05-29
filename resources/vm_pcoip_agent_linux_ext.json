@@ -33,16 +33,7 @@
     }
   },
   "variables": {
-    "extensions": {
-      "Standard": {
-        "scriptFileName": "Install-PCoIPAgent.sh"
-      },
-      "Graphics": {
-        "scriptFileName": "Install-PCoIPGraphicsAgent.sh"
-      }
-    },
-
-    "scriptFileName": "[variables('extensions')[parameters('agentType')].scriptFileName]"
+    "scriptFileName": "Install-PCoIPAgent.sh"
   },
   "resources": [
     {

@@ -57,7 +57,7 @@
       "RHEL 7": {
         "publisher": "RedHat",
         "offer": "RHEL",
-        "sku": "7.2",
+        "sku": "7.3",
         "version": "latest"
       }
     },
